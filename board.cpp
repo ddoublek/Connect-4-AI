@@ -100,8 +100,6 @@ int Board::makeMove(int col){
 
 	if(!canPlace) return -1;
 
-	// std::cout << col << " " <<  row << std::endl;
-
 	if(gameOver(row, col - 1)!= -1) return 1;
 
 	if(turn == 0) ++turn;
@@ -159,7 +157,6 @@ void Board::update(int row, int col, int& currAmount, int rowMod, int colMod){
 			//Must make move no matter what
 			if(yesAmount == 3 || noAmount == 3){
 				currAmount += 999;
-				//return;
 			}
 
 			currAmount += yesAmount + noAmount + bonus + 1;
@@ -186,7 +183,7 @@ int Board::theirBest(int newRow, int newCol){
 	int bestAmount = -1;
 	int row; 
 	for(int i = 0; i < 7; i++){
-		//std::cout << "HI" << std::endl;
+
 		row = 0;
 		while(row < 6 && board[row][i] != -1) ++row;
 		if(row == 6) continue;
@@ -197,9 +194,6 @@ int Board::theirBest(int newRow, int newCol){
 		update(row, i, currAmount, 1, 1);
 		update(row, i, currAmount, 1, -1);
 
-		//std::cout << i << " " << currAmount << std::endl;
-
-		//if(currAmount > 998) return i;
 		scores[i] = currAmount;
 		if(currAmount > bestAmount){
 
@@ -230,20 +224,20 @@ int Board::getBest(){
 		update(row, i, currAmount, 1, 1);
 		update(row, i, currAmount, 1, -1);
 
-		//std::cout << i << " " << currAmount << std::endl;
+
 
 		if(currAmount > 998) return i;
 		scores[i] = currAmount;
-		// if(currAmount > bestAmount ){
-			int theirMax = theirBest(row, i);
-			if(theirMax > 998) theirMax *= 3;
-			if(2*bestAmount - theirAmount < 2*currAmount - theirMax){
-				bestCol = i;
-				bestAmount = currAmount;
-				theirAmount = theirMax;
-			}
+
+		int theirMax = theirBest(row, i);
+		if(theirMax > 998) theirMax *= 3;
+		if(2*bestAmount - theirAmount < 2*currAmount - theirMax){
+			bestCol = i;
+			bestAmount = currAmount;
+			theirAmount = theirMax;
+		}
 			
-		//}
+
 	}
 	return bestCol;
 }
