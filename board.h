@@ -9,7 +9,7 @@ class Board{
 public:
 	Board();
 	void print();
-	void makeMove(int col);
+	int makeMove(int col);
 	bool getTurn();
 	void isFirst(){turn = checkTurn = myTurn = 0, theirTurn = 1;}
 	void isSecond(){turn = checkTurn = myTurn = 1, theirTurn = 0;}

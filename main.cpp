@@ -59,19 +59,28 @@ int main(){
 			continue;
 		}
 
-		bool valMove = board.makeMove(opp_move);
+		int valMove = board.makeMove(opp_move);
 
-		if(!valMove){
+		if(valMove == -1){
 			std::cout << "Invalid move: " << opp_move << std::endl;
 			continue;
 		}
 
+		if(valMove == 1){
+			std::cout << "Game is over, Player has won!" << std::endl;
+			break;
+		}
+
 		best = board.getBest();
-		board.makeMove(best+1);
+		valMove = board.makeMove(best+1);
 		board.print();
-		// std::cout << best+1; 
-		if(board.gameOver()){
-			std::cout << "Game is over" << std::endl;
+
+		if(valMove == -1){
+			std::cerr << "ERROR THIS SHOULD NOT HAPPEN" << std::endl;
+			return 1;
+		}
+		else if(valMove == 1){
+			std::cout << "Game is over, AI has won!" << std::endl;
 			break;
 		}
 	}

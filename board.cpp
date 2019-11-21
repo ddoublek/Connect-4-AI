@@ -18,6 +18,7 @@ Board::Board(){
 }
 
 void Board::print(){
+	std::cout << "***********************************************" << std::endl; 
 	std::string boarder = "-----------------------------";
 	std::cout << "CURRENT BOARD:" << std::endl;
 	for(int i = 5; i >= 0; --i){
@@ -29,7 +30,8 @@ void Board::print(){
 			std::cout << " ";
 			if(board[i][j] == -1) std::cout << " ";
 			else if(board[i][j] == 0) std::cout << "O";
-			else std::cout << "X";
+			else if(board[i][j] == 1) std::cout << "X";
+			else std::cout << "*"; //Should not happen
 			std::cout << " ";
 
 		}
@@ -46,6 +48,7 @@ void Board::print(){
 	}
 	std::cout << std::endl;
 	std::cout << boarder << std::endl;
+	std::cout << "***********************************************" << std::endl;
 }
 
 //When using for getting moves shouldn't be break for else statement but rather be a filler
@@ -57,13 +60,12 @@ int Board::checkWin(int row, int col, int rowMod, int colMod){
 		for(int i = 1; i <= 3; ++i){
 			if(row + k * i * rowMod < 0 || row + k * i * rowMod > 5 
 			|| col + k * i * colMod < 0 || col + k * i * colMod > 6) break;
-				if(board[row + k * i * rowMod][col + k * i * colMod] == turn) ++inRow;
+				if(board[row + k * i * rowMod][col + k * i * colMod] == turn){					
+					++inRow;	
+				} 
 				else break;
 		}
 	}
-	//placeholder
-	std::cout << "(" << col << "," << row << ")" << std::endl;
-	std::cout << "INROW IS " << inRow << std::endl;
 	if(inRow >= 4) return turn;
 	else return -1;
 }
@@ -90,14 +92,24 @@ bool Board::checkPlace(int col, int& row, int move){
 	return true;
 }
 
-void Board::makeMove(int col){
+int Board::makeMove(int col){
 
 
 	int row = 0;
-	checkPlace(col-1, row, turn);
+	bool canPlace = checkPlace(col-1, row, turn);
+
+	if(!canPlace) return -1;
+
+	// std::cout << col << " " <<  row << std::endl;
+
+	if(gameOver(row, col - 1)!= -1) return 1;
 
 	if(turn == 0) ++turn;
 	else --turn;
+
+
+
+	return 0;
 
 }
 
@@ -205,7 +217,7 @@ int Board::theirBest(int newRow, int newCol){
 int Board::getBest(){
 	int bestCol = -1;
 	int bestAmount = -1;
-	int theirAmount = 99999;
+	int theirAmount = 9999;
 	int row; 
 	for(int i = 0; i < 7; i++){
 		row = 0;
